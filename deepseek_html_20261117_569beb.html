@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>История 7 класс: Экзамен PRO</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .app-container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 800px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 20px;
+            position: relative;
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+        }
+
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { font-size: 22px; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+
+        .btn {
+            padding: 14px 20px;
+            font-size: 16px;
+            font-family: inherit;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: var(--text); color: white; }
+        .btn-secondary:hover { background: #0f172a; }
+        .btn-outline { background: transparent; color: var(--muted); border: 2px solid var(--border); }
+        .btn-outline:hover { background: #f1f5f9; color: var(--text); border-color: var(--muted); }
+
+        /* Меню */
+        .menu-options { display: flex; flex-direction: column; gap: 15px; flex: 1; justify-content: center; align-items: center; }
+        .menu-options .btn { max-width: 400px; font-size: 16px; padding: 18px; }
+
+        /* Рулетка карточек */
+        .roulette-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+            margin-bottom: 15px;
+        }
+
+        .cards-wheel {
+            position: relative;
+            width: 280px;
+            height: 280px;
+        }
+
+        .card-slot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 85px;
+            height: 120px;
+            margin: -60px 0 0 -42.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .card-slot:hover, .card-slot:active {
+            z-index: 10;
+            transform: scale(1.1) !important;
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid var(--border);
+            background: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            background-image: repeating-linear-gradient(45deg, #f8fafc 0, #f8fafc 2px, transparent 2px, transparent 8px);
+            transition: all 0.3s ease;
+        }
+
+        .card-face::before {
+            content: '?';
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--muted);
+            background: white;
+            padding: 5px 12px;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Экран бумажки */
+        .paper-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .paper {
+            width: 100%;
+            background-color: #fff;
+            background-image: repeating-linear-gradient(transparent, transparent 31px, #e2e8f0 31px, #e2e8f0 32px);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            animation: paperDrop 0.4s ease-out;
+        }
+
+        @keyframes paperDrop {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .paper-title { font-size: 13px; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; font-weight: 800; margin-bottom: 10px; border-bottom: 2px solid var(--primary); padding-bottom: 5px; display: inline-block; }
+        .paper-q { font-size: 16px; font-weight: 600; line-height: 1.4; margin-bottom: 10px; text-align: left; color: var(--text);}
+        
+        /* Поле ввода */
+        .input-area {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .input-area label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
+        .textarea-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            resize: vertical;
+            background: #fff;
+            color: var(--text);
+            transition: border-color 0.2s;
+        }
+        .textarea-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Результат проверки */
+        .ai-result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            line-height: 1.6;
+            animation: fadeIn 0.3s;
+        }
+        .ai-result strong { color: var(--primary); }
+        .score-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .score-badge.success { background: #ecfdf5; color: var(--success); }
+        .score-badge.warning { background: #fffbeb; color: var(--warning); }
+        .score-badge.danger { background: #fef2f2; color: var(--danger); }
+
+        /* ТЕСТ */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-weight: 600; font-size: 14px; color: var(--muted); }
+        .progress-track { width: 100%; height: 8px; background: var(--border); border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
+        .question-text { font-size: 18px; font-weight: 700; margin-bottom: 20px; text-align: center; color: var(--text); }
+        .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .option-btn { padding: 14px 16px; font-size: 15px; font-family: inherit; font-weight: 500; text-align: left; background: #fff; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; color: var(--text); transition: 0.2s; }
+        .option-btn:hover:not(:disabled) { border-color: var(--primary); background: #eff6ff; }
+        .option-btn.correct { background: #ecfdf5; border-color: var(--success); color: #047857; font-weight: 600;}
+        .option-btn.wrong { background: #fef2f2; border-color: var(--danger); color: #b91c1c; }
+        .option-btn:disabled { cursor: not-allowed; }
+        .feedback-box { padding: 15px; border-radius: 10px; font-size: 14px; display: none; color: var(--text); margin-top: 10px; line-height: 1.5;}
+        .feedback-box.show { display: block; animation: fadeIn 0.3s; }
+        .feedback-box.success { border-left: 6px solid var(--success); background: #ecfdf5; }
+        .feedback-box.error { border-left: 6px solid var(--danger); background: #fef2f2; }
+        .feedback-title { font-weight: 800; margin-bottom: 8px; font-size: 15px;}
+
+        @media (max-width: 600px) {
+            .app-container { padding: 15px; min-height: 95vh; }
+            h1 { font-size: 20px; }
+            .card-slot { width: 70px; height: 100px; margin: -50px 0 0 -35px; }
+            .cards-wheel { transform: scale(0.9); }
+            .btn { font-size: 15px; padding: 12px 15px; }
+            .paper { padding: 15px; }
+            .paper-q { font-size: 15px; }
+            .textarea-input { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1 id="main-title">📚 История 7 класс</h1>
+    <p class="subtitle" id="main-subtitle">Подготовка к устному экзамену</p>
+
+    <!-- ГЛАВНОЕ МЕНЮ -->
+    <div id="screen-menu" class="menu-options fade-in">
+        <button class="btn btn-primary" onclick="startRoulette()">🃏 Выбрать билет (Карточки)</button>
+        <button class="btn btn-secondary" onclick="startExam()">📝 Пройти тест</button>
+    </div>
+
+    <!-- ЭКРАН РУЛЕТКИ -->
+    <div id="screen-roulette" class="hidden fade-in" style="flex:1; display:flex; flex-direction:column;">
+        <h2 style="text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 5px;">Нажмите на любую карточку</h2>
+        <div class="roulette-container">
+            <div class="cards-wheel" id="cards-wheel">
+                <!-- Карточки генерируются JS -->
+            </div>
+        </div>
+        <button class="btn btn-outline" style="margin-top: auto;" onclick="exitToMenu()">В главное меню</button>
+    </div>
+
+    <!-- ЭКРАН БУМАЖКИ (КАРТОЧКИ) -->
+    <div id="screen-paper" class="paper-screen hidden fade-in">
+        <div class="paper" id="paper-element">
+            <div id="paper-content"></div>
+        </div>
+        
+        <div class="input-area" id="input-container">
+            <label>✍️ Напишите свой ответ здесь:</label>
+            <textarea class="textarea-input" id="user-answer" placeholder="Введите ваш ответ..."></textarea>
+        </div>
+
+        <button class="btn btn-primary" id="check-btn" onclick="checkAnswer()" style="margin-bottom: 15px;">🤖 Проверить ответ</button>
+        <button class="btn btn-outline" onclick="backToRoulette()">Назад к выбору</button>
+        
+        <div id="ai-feedback" class="ai-result hidden"></div>
+    </div>
+
+    <!-- ЭКРАН ТЕСТА -->
+    <div id="screen-exam" class="hidden fade-in" style="flex: 1; display: flex; flex-direction: column;">
+        <div class="top-bar">
+            <span id="ui-progress">Вопрос 1 / 25</span>
+            <span id="ui-score">Счёт: 0</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="ui-progress-bar"></div></div>
+
+        <div class="question-text" id="q-text-element">Загрузка...</div>
+        <div class="options-list" id="q-options"></div>
+        
+        <div class="feedback-box" id="q-feedback">
+            <div class="feedback-title" id="fb-title"></div>
+            <div id="fb-text"></div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 15px; text-align: center;">
+            <button class="btn btn-primary hidden" id="btn-next-q" onclick="nextQuestion()">Следующий вопрос ➡️</button>
+            <button class="btn btn-outline" style="margin-top: 10px;" onclick="exitToMenu()">Выйти в меню</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- БАЗА ДАННЫХ ---
+    const ticketsData = [
+        { ticket: 1, q1: "Каковы были предпосылки Великих географических открытий?", a1_t: "Поиск новых торговых путей на Восток.", a1_d: "Османы перекрыли старые пути, а Европе нужны были золото и пряности.", a1_v: "Это привело к началу эпохи Великих открытий.", keywords: ["торговые пути", "восток", "османы", "золото", "пряности"], q2: "В чём заключались последствия открытий для Европы?", a2_t: "Революция цен и смещение торговых путей.", a2_d: "Приток золота из Америки вызвал инфляцию, а торговля переместилась в Атлантику.", a2_v: "Началось формирование колониальных империй.", testQ: "В чём главная предпосылка Великих географических открытий?", correct: "Поиск новых торговых путей на Восток и нехватка золота", wrong: ["Стремление к научным открытиям в Антарктиде", "Борьба за независимость США", "Желание построить социализм"] },
+        { ticket: 2, q1: "Охарактеризуйте экспедиции Христофора Колумба.", a1_t: "Открытие Америки в 1492 году.", a1_d: "Колумб совершил 4 плавания, полагая, что нашел путь в Индию.", a1_v: "Это дало старт колонизации Нового Света.", keywords: ["Америка", "1492", "Колумб", "Индия"], q2: "В чём суть Тордесильясского договора 1494 года?", a2_t: "Раздел сфер влияния между Испанией и Португалией.", a2_d: "Папа Римский провел меридиан, разделивший мир на западную и восточную зоны.", a2_v: "Это предотвратило войну между двумя державами.", testQ: "В чём суть Тордесильясского договора 1494 года?", correct: "Разделил сферы влияния Испании и Португалии по меридиану", wrong: ["Запретил морскую торговлю", "Создал ООН", "Объединил Испанию и Португалию в одно государство"] },
+        { ticket: 3, q1: "Расскажите о путешествии Васко да Гамы.", a1_t: "Открытие морского пути в Индию.", a1_d: "В 1498 году он обогнул Африку и достиг берегов Индии.", a1_v: "Португалия стала главной морской державой.", keywords: ["Васко да Гама", "Индия", "1498", "Африка"], q2: "Каково значение плавания Магеллана?", a2_t: "Доказательство шарообразности Земли.", a2_d: "Экспедиция 1519-1522 гг. впервые обогнула земной шар.", a2_v: "Было доказано единство Мирового океана.", testQ: "Кто открыл морской путь в Индию в 1498 году?", correct: "Васко да Гама", wrong: ["Христофор Колумб", "Фернан Магеллан", "Бартоломеу Диаш"] },
+        { ticket: 4, q1: "Что такое конкиста?", a1_t: "Завоевание Америки испанцами.", a1_d: "Кортес покорил ацтеков, а Писарро — инков.", a1_v: "Это привело к гибели древних цивилизаций.", keywords: ["конкиста", "Кортес", "Писарро", "ацтеки", "инки"], q2: "Как проходило освоение Северной Америки?", a2_t: "Создание колоний европейцами.", a2_d: "Англичане и французы основывали поселения, вытесняя индейцев.", a2_v: "Это привело к формированию новых наций.", testQ: "Кто такие конкистадоры?", correct: "Испанские завоеватели Америки (Кортес, Писарро)", wrong: ["Мореплаватели, ищущие Индию", "Учёные, изучающие звёзды", "Средневековые рыцари"] },
+        { ticket: 5, q1: "Что такое колониальные империи?", a1_t: "Государства, владеющие заморскими территориями.", a1_d: "Испания и Португалия захватили земли в Америке, Африке и Азии.", a1_v: "Это обогатило метрополии, но разрушило местные культуры.", keywords: ["колонии", "империя", "Испания", "Португалия"], q2: "Как изменилась жизнь коренного населения?", a2_t: "Катастрофическое изменение жизни.", a2_d: "Эпидемии, рабство и принудительный труд уничтожили большую часть населения.", a2_v: "Традиционные общества были разрушены.", testQ: "Что такое колониальная империя?", correct: "Государство, владеющее заморскими территориями", wrong: ["Страна, где нет короля", "Союз племён индейцев", "Государство, где правит парламент"] },
+        { ticket: 6, q1: "Какие изменения произошли в экономике Европы?", a1_t: "Зарождение капитализма.", a1_d: "Появились мануфактуры, банки и наемный труд.", a1_v: "Это ускорило развитие промышленности.", keywords: ["капитализм", "мануфактуры", "банки", "наемный труд"], q2: "Что такое мануфактура?", a2_t: "Предприятие с ручным трудом.", a2_d: "Рабочие выполняли отдельные операции вручную.", a2_v: "Это был первый шаг к фабричному производству.", testQ: "Что такое мануфактура?", correct: "Предприятие с ручным трудом и разделением операций", wrong: ["Фабрика с роботами", "Место, где торгуют рабами", "Крупный торговый корабль"] },
+        { ticket: 7, q1: "Что такое Реформация?", a1_t: "Движение за обновление церкви.", a1_d: "Лютер и Кальвин критиковали продажу индульгенций.", a1_v: "Это привело к расколу католической церкви.", keywords: ["Реформация", "Лютер", "Кальвин", "индульгенции", "церковь"], q2: "Что такое Контрреформация?", a2_t: "Ответ католической церкви.", a2_d: "Был создан орден иезуитов и проведен Тридентский собор.", a2_v: "Церковь укрепила свои позиции в Европе.", testQ: "Кто начал Реформацию в Германии?", correct: "Мартин Лютер", wrong: ["Жан Кальвин", "Генрих VIII", "Папа Римский"] },
+        { ticket: 8, q1: "Особенности развития германских земель.", a1_t: "Политическая раздробленность.", a1_d: "Германия состояла из множества княжеств, а Габсбурги правили Австрией.", a1_v: "Это мешало созданию единого государства.", keywords: ["раздробленность", "Германия", "Габсбурги", "Австрия"], q2: "Могущество и слабость Испании.", a2_t: "Могущество из-за колоний, слабость из-за экономики.", a2_d: "Золото Америки уплывало в другие страны, а войны истощали казну.", a2_v: "Испания потеряла статус великой державы.", testQ: "В чём заключалась слабость Испанской монархии?", correct: "В экономическом отставании и поражениях в войнах", wrong: ["В отсутствии колоний", "В отсутствии армии", "В отсутствии короля"] },
+        { ticket: 9, q1: "Почему Нидерланды называют страной «пути к расцвету»?", a1_t: "Расцвет за счет торговли и флота.", a1_d: "Они создали огромный флот и основали Ост-Индскую компанию.", a1_v: "Амстердам стал центром мировой торговли.", keywords: ["Нидерланды", "торговля", "флот", "Амстердам"], q2: "Становление абсолютизма во Франции.", a2_t: "Укрепление власти короля.", a2_d: "Людовик XIV перестал созывать Генеральные штаты и подчинил знать.", a2_v: "Франция стала образцом абсолютной монархии.", testQ: "При каком короле во Франции сложился абсолютизм?", correct: "При Людовике XIV", wrong: ["При Людовике XVI", "При Карле Великом", "При Наполеоне Бонапарте"] },
+        { ticket: 10, q1: "Правление Тюдоров.", a1_t: "Укрепление абсолютизма и Реформация.", a1_d: "Генрих VIII создал англиканскую церковь, а Елизавета I разгромила Армаду.", a1_v: "Англия стала протестантской и морской державой.", keywords: ["Тюдоры", "Генрих VIII", "Елизавета", "Армада", "церковь"], q2: "Причины и итоги Английской революции.", a2_t: "Ограничение власти короля.", a2_d: "Недовольство парламента привело к казни Карла I и Славной революции.", a2_v: "Установилась конституционная монархия.", testQ: "К чему привела Английская революция XVII века?", correct: "К ограничению власти короля и конституционной монархии", wrong: ["К полному уничтожению Англии", "К власти Папы Римского", "К созданию коммунизма"] },
+        { ticket: 11, q1: "Почему Речь Посполитая была «слабой»?", a1_t: "Анархия из-за шляхетской демократии.", a1_d: "Право «либерум вето» позволяло одному депутату сорвать сейм.", a1_v: "Это привело к разделу страны соседями.", keywords: ["Речь Посполитая", "либерум вето", "сейм", "раздел"], q2: "Международные отношения XVI-XVII вв.", a2_t: "Борьба за гегемонию.", a2_d: "Габсбурги боролись с Францией, а также шли религиозные войны.", a2_v: "Это вылилось в Тридцатилетнюю войну.", testQ: "Почему Речь Посполитая оказалась «слабой»?", correct: "Из-за шляхетской демократии и права «либерум вето»", wrong: ["Из-за отсутствия выхода к морю", "Из-за частых землетрясений", "Из-за отсутствия армии"] },
+        { ticket: 12, q1: "Причины и итоги Тридцатилетней войны.", a1_t: "Религиозный и политический конфликт.", a1_d: "Католики боролись с протестантами, а Габсбурги — с Францией.", a1_v: "Война завершилась Вестфальским миром.", keywords: ["Тридцатилетняя война", "Вестфальский мир", "католики", "протестанты"], q2: "Что изменила Вестфальская система?", a2_t: "Закрепила суверенитет государств.", a2_d: "Были установлены новые границы и принцип независимости.", a2_v: "Это заложило основы современной дипломатии.", testQ: "Какой мир завершил Тридцатилетнюю войну?", correct: "Вестфальский мир 1648 года", wrong: ["Тордесильясский договор", "Парижский мир", "Версальский мир"] },
+        { ticket: 13, q1: "Особенности Реформации в Англии.", a1_t: "Реформация «сверху».", a1_d: "Генрих VIII объявил себя главой церкви ради развода.", a1_v: "Церковь стала англиканской.", keywords: ["Англия", "Генрих VIII", "англиканская", "развод"], q2: "Влияние религиозных войн во Франции.", a2_t: "Укрепление королевской власти.", a2_d: "Хаос войн показал необходимость сильной власти короля (Генрих IV).", a2_v: "Это привело к укреплению абсолютизма.", testQ: "В чём особенность Реформации в Англии?", correct: "Она была проведена «сверху» королём Генрихом VIII", wrong: ["Её возглавили крестьяне", "Она не произошла вовсе", "Её возглавил Папа Римский"] },
+        { ticket: 14, q1: "Что такое абсолютизм?", a1_t: "Неограниченная власть монарха.", a1_d: "Король контролирует армию, финансы и церковь.", a1_v: "Это форма правления Нового времени.", keywords: ["абсолютизм", "монарх", "власть", "король"], q2: "Сравнение Франции и Англии.", a2_t: "Разные пути.", a2_d: "Во Франции власть короля росла, а в Англии парламент ограничивал короля.", a2_v: "Во Франции — абсолютизм, в Англии — конституционная монархия.", testQ: "Что такое абсолютизм?", correct: "Неограниченная власть монарха", wrong: ["Власть парламента", "Власть народа", "Власть церкви"] },
+        { ticket: 15, q1: "Изменения в облике городов.", a1_t: "Рост и благоустройство.", a1_d: "Появились биржи, ратуши, мощеные улицы.", a1_v: "Города стали центрами экономической жизни.", keywords: ["города", "биржи", "ратуши", "улицы"], q2: "Новые социальные группы.", a2_t: "Появление буржуазии и рабочих.", a2_d: "Развитие мануфактур создало класс предпринимателей и наемных рабочих.", a2_v: "Изменилась структура общества.", testQ: "Какие новые социальные группы появились в Европе?", correct: "Буржуазия и наёмные рабочие", wrong: ["Рыцари и крестоносцы", "Фараоны и жрецы", "Рабы и патриции"] },
+        { ticket: 16, q1: "Отношения с Османской империей.", a1_t: "Военное противостояние.", a1_d: "Османы осаждали Вену (1529, 1683), угрожая Европе.", a1_v: "Это остановило их экспансию.", keywords: ["Османская империя", "Вена", "осада", "Европа"], q2: "Влияние открытий на внешнюю политику.", a2_t: "Борьба за колонии.", a2_d: "Великие открытия сместили интересы держав в Атлантику.", a2_v: "Началось соперничество за морское господство.", testQ: "Как складывались отношения Европы с Османской империей?", correct: "В основном как военное противостояние (осада Вены)", wrong: ["Как мирный союз", "Они не контактировали", "Как торговое партнёрство без конфликтов"] },
+        { ticket: 17, q1: "Что такое Возрождение?", a1_t: "Эпоха расцвета культуры.", a1_d: "Обращение к античности, деятели: Леонардо да Винчи, Рафаэль.", a1_v: "Это время гуманизма.", keywords: ["Возрождение", "античность", "Леонардо", "Рафаэль", "гуманизм"], q2: "Что такое гуманизм?", a2_t: "Идеология в центре с человеком.", a2_d: "Гуманисты ценили разум и земную жизнь.", a2_v: "Это освободило человека от догм.", testQ: "Что такое гуманизм?", correct: "Идеология, ставящая в центр человека и его земную жизнь", wrong: ["Вера в загробную жизнь", "Поклонение природе", "Отрицание науки"] },
+        { ticket: 18, q1: "Барокко и классицизм.", a1_t: "Два стиля в искусстве.", a1_d: "Барокко — пышность, классицизм — строгость.", a1_v: "Они отразили разные взгляды на мир.", keywords: ["барокко", "классицизм", "пышность", "строгость"], q2: "Отличие культуры XVII века от Возрождения.", a2_t: "Больший драматизм.", a2_d: "XVII век показал сложность человека.", a2_v: "Искусство стало более реалистичным.", testQ: "Чем барокко отличается от классицизма?", correct: "Барокко — пышность и динамика, классицизм — строгость", wrong: ["Барокко — это живопись, а классицизм — музыка", "Ничем не отличается", "Барокко — это древний стиль"] },
+        { ticket: 19, q1: "Научная революция.", a1_t: "Переворот в науке.", a1_d: "Коперник, Галилей и Ньютон доказали законы физики.", a1_v: "Наука стала основой мировоззрения.", keywords: ["наука", "Коперник", "Галилей", "Ньютон", "физика"], q2: "Изменение представлений о мире.", a2_t: "Разрушение старой картины мира.", a2_d: "Земля больше не центр Вселенной.", a2_v: "Это подорвало авторитет церкви.", testQ: "Кто доказал, что Земля вращается вокруг Солнца?", correct: "Николай Коперник и Галилео Галилей", wrong: ["Птолемей", "Христофор Колумб", "Исаак Ньютон"] },
+        { ticket: 20, q1: "Османская империя: могущество и упадок.", a1_t: "Расцвет при Сулеймане, упадок после Вены.", a1_d: "Завоевания сменились поражением 1683 года.", a1_v: "Империя начала терять территории.", keywords: ["Османы", "Сулейман", "Вена", "1683"], q2: "Управление и армия Османов.", a2_t: "Строгая иерархия.", a2_d: "Власть султана и элитная пехота (янычары).", a2_v: "Это обеспечивало мощь.", testQ: "При каком султане Османская империя достигла могущества?", correct: "При Сулеймане Великолепном", wrong: ["При Сулеймане Грозном", "При Мехмеде I", "При Ататюрке"] },
+        { ticket: 21, q1: "Особенности Ирана при Сефевидах.", a1_t: "Утверждение шиизма.", a1_d: "Шиизм стал государственной религией.", a1_v: "Это укрепило независимость Ирана.", keywords: ["Иран", "Сефевиды", "шиизм", "религия"], q2: "Религия и традиции Ирана.", a2_t: "Ислам и персидские традиции.", a2_d: "Культура развивалась под влиянием шиизма.", a2_v: "Сформировалась уникальная культура.", testQ: "Какая религия стала государственной в Иране при Сефевидах?", correct: "Шиизм", wrong: ["Суннизм", "Буддизм", "Христианство"] },
+        { ticket: 22, q1: "Государство Великих Моголов.", a1_t: "Расцвет при Акбаре.", a1_d: "Акбар проводил политику веротерпимости.", a1_v: "Это укрепило империю.", keywords: ["Моголы", "Акбар", "Индия", "веротерпимость"], q2: "Хозяйство и устройство Индии.", a2_t: "Традиционное общество.", a2_d: "Кастовая система и общинное землевладение.", a2_v: "Это замедляло развитие.", testQ: "При каком правителе государство Великих Моголов достигло расцвета?", correct: "При Акбаре", wrong: ["При Бабуре", "При Шах-Джахане", "При Ашоке"] },
+        { ticket: 23, q1: "Развитие Китая и Японии.", a1_t: "Жесткая централизация.", a1_d: "В Китае правили Мин и Цин, в Японии — сёгуны.", a1_v: "Оба государства были закрыты.", keywords: ["Китай", "Япония", "Мин", "Цин", "сёгуны"], q2: "Политика «закрытия» в Японии.", a2_t: "Изоляция страны.", a2_d: "Запрет на въезд и выезд.", a2_v: "Это сохранило традиции, но привело к отставанию.", testQ: "К чему привела политика «закрытия» в Японии?", correct: "К изоляции и сохранению традиций", wrong: ["К быстрому развитию капитализма", "К войне с Китаем", "К созданию колоний"] },
+        { ticket: 24, q1: "Государства Африки.", a1_t: "Множество государств.", a1_d: "Конго, Бенин, Мономотапа.", a1_v: "Они жили в традиционном обществе.", keywords: ["Африка", "Конго", "Бенин", "Мономотапа"], q2: "Влияние колонизации на Африку.", a2_t: "Разрушение и работорговля.", a2_d: "Вывоз рабов уничтожал население.", a2_v: "Африка стала источником ресурсов.", testQ: "Какое влияние оказала колонизация на Африку?", correct: "Разрушение культур и работорговля", wrong: ["Быстрое экономическое процветание", "Создание демократических государств", "Развитие науки"] },
+        { ticket: 25, q1: "Что такое колониальная империя?", a1_t: "Государство с колониями.", a1_d: "Испания, Португалия, Англия и Франция владели землями.", a1_v: "Метрополии обогащались.", keywords: ["колониальная империя", "метрополия", "колонии"], q2: "Эксплуатация колоний.", a2_t: "Использование ресурсов и рабов.", a2_d: "На плантациях и рудниках использовали труд рабов.", a2_v: "Это приносило огромные доходы.", testQ: "Как была организована эксплуатация колоний?", correct: "Через плантации, рудники и работорговлю", wrong: ["Через научные исследования", "Через туризм", "Через равноправное партнёрство"] }
+    ];
+
+    // --- ПЕРЕМЕННЫЕ ---
+    let selectedTicket = null;
+    let currentIndex = 0;
+    let score = 0;
+    let examList = [];
+
+    // --- ЗВУКИ ---
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+    function playSound(type) {
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        if (type === 'click') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        } else if (type === 'success') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        }
+    }
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function switchScreen(screenId) {
+        ['screen-menu', 'screen-roulette', 'screen-paper', 'screen-exam'].forEach(id => {
+            document.getElementById(id).classList.add('hidden');
+        });
+        document.getElementById(screenId).classList.remove('hidden');
+    }
+
+    function exitToMenu() {
+        playSound('click');
+        switchScreen('screen-menu');
+    }
+
+    // --- КОЛЕСО ФОРТУНЫ (КАРТОЧКИ) ---
+    function startRoulette() {
+        playSound('click');
+        switchScreen('screen-roulette');
+        
+        const wheel = document.getElementById('cards-wheel');
+        wheel.innerHTML = '';
+        
+        // Генерируем 8 случайных карточек на колесе (чтобы не пересекались)
+        const randomCards = shuffle([...ticketsData]).slice(0, 8);
+        const radius = 130; // Радиус для мобильных (карточки не пересекаются)
+        
+        randomCards.forEach((card, i) => {
+            const angle = (i * (360 / 8)) * (Math.PI / 180);
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            
+            const slot = document.createElement('div');
+            slot.className = 'card-slot';
+            // Позиционируем карточки по кругу
+            slot.style.transform = `translate(${x}px, ${y}px) rotate(${i * (360 / 8)}deg)`;
+            
+            const face = document.createElement('div');
+            face.className = 'card-face';
+            
+            slot.appendChild(face);
+            slot.onclick = () => pickCard(card);
+            
+            wheel.appendChild(slot);
+        });
+    }
+
+    function pickCard(card) {
+        playSound('success');
+        selectedTicket = card;
+        switchScreen('screen-paper');
+        
+        document.getElementById('paper-content').innerHTML = `
+            <div class="paper-title">Билет №${card.ticket}</div>
+            <div class="paper-q">1. ${card.q1}</div>
+            <div class="paper-q">2. ${card.q2}</div>
+        `;
+        
+        document.getElementById('user-answer').value = '';
+        document.getElementById('ai-feedback').classList.add('hidden');
+    }
+
+    function backToRoulette() {
+        startRoulette();
+    }
+
+    // --- ПРОВЕРКА ОТВЕТА (ТЕКСТОВЫЙ ИИ) ---
+    function checkAnswer() {
+        const userText = document.getElementById('user-answer').value.trim();
+        const feedbackEl = document.getElementById('ai-feedback');
+        
+        if (userText.length < 10) {
+            alert("Пожалуйста, напишите более развернутый ответ (хотя бы одно предложение).");
+            return;
+        }
+
+        feedbackEl.classList.remove('hidden');
+        
+        const lowerText = userText.toLowerCase();
+        const keywords = selectedTicket.keywords || [];
+        
+        let foundKeywords = [];
+        keywords.forEach(word => {
+            if (lowerText.includes(word.toLowerCase())) {
+                foundKeywords.push(word);
+            }
+        });
+
+        const percentMatched = Math.round((foundKeywords.length / keywords.length) * 100);
+
+        let resultHtml = '';
+        let scoreBadgeClass = '';
+        let scoreText = '';
+
+        if (percentMatched >= 60) {
+            playSound('success');
+            scoreBadgeClass = 'success';
+            scoreText = `Оценка: 5 (Отлично) — Совпадение ${percentMatched}%`;
+            resultHtml = `<span class="score-badge ${scoreBadgeClass}">${scoreText}</span><br>
+                          Вы отлично справились! Упомянуты ключевые моменты: <b>${foundKeywords.join(', ')}</b>.`;
+        } else if (percentMatched > 0) {
+            scoreBadgeClass = 'warning';
+            scoreText = `Оценка: 3-4 (Неплохо) — Совпадение ${percentMatched}%`;
+            resultHtml = `<span class="score-badge ${scoreBadgeClass}">${scoreText}</span><br>
+                          Вы упомянули: <b>${foundKeywords.join(', ')}</b>. <br>Но стоит добавить: <i>${keywords.filter(k => !foundKeywords.includes(k)).join(', ')}</i>.`;
+        } else {
+            scoreBadgeClass = 'danger';
+            scoreText = `Оценка: 2 (Слабо) — Совпадение ${percentMatched}%`;
+            resultHtml = `<span class="score-badge ${scoreBadgeClass}">${scoreText}</span><br>
+                          К сожалению, ключевые слова не найдены. Попробуйте еще раз или прочитайте правильный ответ ниже.`;
+        }
+
+        // Добавляем правильный ответ для сравнения
+        resultHtml += `
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border);">
+                <strong>Правильный ответ (Тезис):</strong><br>
+                ${selectedTicket.a1_t}<br><br>
+                <strong>Доказательство:</strong><br>
+                ${selectedTicket.a1_d}<br><br>
+                <strong>Вывод:</strong><br>
+                ${selectedTicket.a1_v}
+            </div>
+        `;
+
+        feedbackEl.innerHTML = resultHtml;
+    }
+
+    // --- ТЕСТ (УПРОЩЕННЫЙ) ---
+    function startExam() {
+        playSound('click');
+        currentIndex = 0;
+        score = 0;
+        examList = shuffle([...ticketsData]);
+        switchScreen('screen-exam');
+        loadQuiz();
+    }
+
+    function loadQuiz() {
+        document.getElementById('ui-progress').innerText = `Вопрос ${currentIndex + 1} / ${examList.length}`;
+        document.getElementById('ui-score').innerText = `Счёт: ${score}`;
+        document.getElementById('ui-progress-bar').style.width = `${((currentIndex) / examList.length) * 100}%`;
+
+        const q = examList[currentIndex];
+        document.getElementById('q-text-element').innerText = q.testQ;
+        
+        const optsContainer = document.getElementById('q-options');
+        optsContainer.innerHTML = ''; 
+        document.getElementById('q-feedback').className = 'feedback-box';
+        document.getElementById('btn-next-q').classList.add('hidden');
+
+        const allOpts = shuffle([q.correct, ...q.wrong]);
+        
+        allOpts.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => {
+                const allBtns = document.querySelectorAll('.option-btn');
+                allBtns.forEach(b => {
+                    b.disabled = true;
+                    if (b.innerText === q.correct) b.classList.add('correct');
+                });
+
+                const feedback = document.getElementById('q-feedback');
+                const tdvAnswer = `<strong>Тезис:</strong> ${q.a1_t}<br><strong>Доказательство:</strong> ${q.a1_d}<br><strong>Вывод:</strong> ${q.a1_v}`;
+
+                if (opt === q.correct) {
+                    score++;
+                    playSound('success');
+                    btn.classList.add('correct');
+                    feedback.className = 'feedback-box success show';
+                    document.getElementById('fb-title').innerText = '✅ Верно!';
+                    document.getElementById('fb-text').innerHTML = tdvAnswer;
+                } else {
+                    playSound('click');
+                    btn.classList.add('wrong');
+                    feedback.className = 'feedback-box error show';
+                    document.getElementById('fb-title').innerText = '❌ Ошибка!';
+                    document.getElementById('fb-text').innerHTML = tdvAnswer;
+                }
+
+                document.getElementById('ui-score').innerText = `Счёт: ${score}`;
+                document.getElementById('btn-next-q').classList.remove('hidden');
+            };
+            optsContainer.appendChild(btn);
+        });
+    }
+
+    function nextQuestion() {
+        playSound('click');
+        currentIndex++;
+        if (currentIndex < examList.length) {
+            loadQuiz();
+        } else {
+            alert(`Тест завершен! Ваш счет: ${score} из ${examList.length}`);
+            exitToMenu();
+        }
+    }
+</script>
+</body>
+</html>
